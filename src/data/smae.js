@@ -1,0 +1,66 @@
+export const FOOD_GROUPS = {
+  Verduras: { proteina: 2, carbohidratos: 4, lipidos: 0, energia: 25 },
+  Frutas: { proteina: 0, carbohidratos: 15, lipidos: 0, energia: 60 },
+  "Cereales s/G": { proteina: 2, carbohidratos: 15, lipidos: 0, energia: 70 },
+  "Cereales c/G": { proteina: 2, carbohidratos: 15, lipidos: 5, energia: 115 },
+  Leguminosas: { proteina: 8, carbohidratos: 20, lipidos: 1, energia: 120 },
+  "AOA MBAG": { proteina: 7, carbohidratos: 0, lipidos: 1, energia: 40 },
+  "AOA BAG": { proteina: 7, carbohidratos: 0, lipidos: 3, energia: 55 },
+  "AOA MAG": { proteina: 7, carbohidratos: 0, lipidos: 5, energia: 75 },
+  "AOA AAG": { proteina: 7, carbohidratos: 0, lipidos: 8, energia: 100 },
+  "Leche descremada": {
+    proteina: 9,
+    carbohidratos: 12,
+    lipidos: 2,
+    energia: 95,
+  },
+  "Leche semidescremada": {
+    proteina: 9,
+    carbohidratos: 12,
+    lipidos: 4,
+    energia: 110,
+  },
+  "Leche entera": { proteina: 9, carbohidratos: 12, lipidos: 8, energia: 150 },
+  "Leche con azucar": {
+    proteina: 8,
+    carbohidratos: 30,
+    lipidos: 5,
+    energia: 200,
+  },
+  "Grasas s/P": { proteina: 0, carbohidratos: 0, lipidos: 5, energia: 45 },
+  "Grasas c/P": { proteina: 3, carbohidratos: 3, lipidos: 5, energia: 70 },
+  "Azucares s/G": { proteina: 0, carbohidratos: 10, lipidos: 0, energia: 40 },
+  "Azucares c/G": { proteina: 0, carbohidratos: 10, lipidos: 5, energia: 85 },
+};
+
+export const INITIAL_FOODS = [
+  { id: "1", nombre: "Manzana", unidad: "pza", porcion: 1, grupo: "Frutas" },
+  {
+    id: "2",
+    nombre: "Arroz cocido",
+    unidad: "taza",
+    porcion: 0.25,
+    grupo: "Cereales s/G",
+  },
+  {
+    id: "3",
+    nombre: "Pechuga de pollo",
+    unidad: "g",
+    porcion: 30,
+    grupo: "AOA MBAG",
+  },
+  {
+    id: "4",
+    nombre: "Aceite de oliva",
+    unidad: "cdita",
+    porcion: 1,
+    grupo: "Grasas s/P",
+  },
+  {
+    id: "5",
+    nombre: "Leche light",
+    unidad: "taza",
+    porcion: 1,
+    grupo: "Leche descremada",
+  },
+];
