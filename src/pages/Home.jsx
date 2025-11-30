@@ -51,7 +51,12 @@ const Home = () => {
       {/* Resumen Total Flotante o Fijo al final */}
       <div className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-indigo-100 shadow-lg p-4 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center gap-4">
-          <div className="font-bold text-slate-700 text-lg">Total Diario</div>
+          <div className="flex flex-col">
+            <div className="font-bold text-slate-700 text-lg">Total Diario</div>
+            <div className="text-xs text-slate-400 mt-1">
+              Diseñado por <span className="font-bold text-indigo-500">Yullinsky</span> • <a href="https://github.com/Yullinsky/" target="_blank" rel="noopener noreferrer" className="hover:text-indigo-600 underline decoration-dotted">GitHub</a>
+            </div>
+          </div>
           <div className="flex gap-8 text-sm font-medium text-right">
             <div className="flex flex-col items-end">
               <span className="text-slate-600">Proteína: <span className="text-indigo-700 font-bold">{dailyTotals.proteina.toFixed(1)}g</span></span>

@@ -1,24 +1,42 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { INITIAL_FOODS, FOOD_GROUPS } from '../data/smae';
+import { supabase } from '../supabaseClient';
 
 const MenuContext = createContext();
 
 export const useMenu = () => useContext(MenuContext);
 
 export const MenuProvider = ({ children }) => {
-  // Estado de Alimentos (Persistente)
-  const [foods, setFoods] = useState(() => {
-    const savedFoods = localStorage.getItem('smae_foods');
-    return savedFoods ? JSON.parse(savedFoods) : INITIAL_FOODS;
-  });
+  // Estado de Alimentos (Supabase)
+  const [foods, setFoods] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Guardar alimentos en LS cuando cambien
+  // Cargar alimentos desde Supabase
+  const fetchFoods = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('foods')
+        .select('*')
+        .order('nombre', { ascending: true });
+      
+      if (error) throw error;
+      
+      // Si la BD está vacía, podríamos ofrecer cargar los iniciales (opcional)
+      // Por ahora, si está vacía, mostramos vacío.
+      setFoods(data || []);
+    } catch (error) {
+      console.error('Error fetching foods:', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    localStorage.setItem('smae_foods', JSON.stringify(foods));
-  }, [foods]);
+    fetchFoods();
+  }, []);
 
-  // Estado del Menú
+  // Estado del Menú (Local - Persistencia en navegador para el usuario actual)
   const [meals, setMeals] = useState([
     { id: uuidv4(), name: 'Desayuno', items: [] },
     { id: uuidv4(), name: 'Colación 1', items: [] },
@@ -27,17 +45,59 @@ export const MenuProvider = ({ children }) => {
     { id: uuidv4(), name: 'Cena', items: [] },
   ]);
 
-  // Acciones de Alimentos (Admin)
-  const addFood = (food) => {
-    setFoods([...foods, { ...food, id: uuidv4() }]);
+  // Acciones de Alimentos (Admin - Supabase)
+  const addFood = async (food) => {
+    try {
+      // Eliminamos ID generado por uuidv4 ya que Supabase lo genera (o lo enviamos si es uuid)
+      // La tabla tiene id uuid default gen_random_uuid()
+      const { data, error } = await supabase
+        .from('foods')
+        .insert([{ ...food }]) // Supabase generará el ID si no se envía, o podemos enviarlo.
+        .select();
+
+      if (error) throw error;
+      
+      // Actualizar estado local
+      setFoods([...foods, ...data]);
+      return { success: true };
+    } catch (error) {
+      console.error('Error adding food:', error.message);
+      return { success: false, error: error.message };
+    }
   };
 
-  const updateFood = (id, updatedFood) => {
-    setFoods(foods.map(f => f.id === id ? updatedFood : f));
+  const updateFood = async (id, updatedFood) => {
+    try {
+      const { error } = await supabase
+        .from('foods')
+        .update(updatedFood)
+        .eq('id', id);
+
+      if (error) throw error;
+
+      setFoods(foods.map(f => f.id === id ? { ...f, ...updatedFood } : f));
+      return { success: true };
+    } catch (error) {
+      console.error('Error updating food:', error.message);
+      return { success: false, error: error.message };
+    }
   };
 
-  const deleteFood = (id) => {
-    setFoods(foods.filter(f => f.id !== id));
+  const deleteFood = async (id) => {
+    try {
+      const { error } = await supabase
+        .from('foods')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      setFoods(foods.filter(f => f.id !== id));
+      return { success: true };
+    } catch (error) {
+      console.error('Error deleting food:', error.message);
+      return { success: false, error: error.message };
+    }
   };
 
   // Acciones del Menú
@@ -103,9 +163,6 @@ export const MenuProvider = ({ children }) => {
     if (!group) return null;
 
     // Cálculo de equivalentes
-    // Si la porción es 1 pieza y el usuario pone 2, son 2 equivalentes.
-    // Si la porción es 100g y el usuario pone 200, son 2 equivalentes.
-    // Equivalentes = Cantidad Usuario / Porción Base (que es 1 eq)
     const equivalents = parseFloat(quantity) / parseFloat(food.porcion);
     
     return {
@@ -121,6 +178,7 @@ export const MenuProvider = ({ children }) => {
   return (
     <MenuContext.Provider value={{
       foods,
+      loading,
       meals,
       addFood,
       updateFood,
