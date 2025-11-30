@@ -44,16 +44,16 @@ const MealTime = ({ meal }) => {
     <div className="card mb-6">
       <div className="flex justify-between items-center mb-4 border-b border-gray-100 pb-2">
         <input 
-          className="text-lg font-bold bg-transparent border-none focus:ring-0 text-indigo-700"
+          className="text-xl font-bold bg-indigo-100 text-indigo-800 px-3 py-1 rounded-lg border-none focus:ring-2 focus:ring-indigo-500 w-full mr-4"
           value={meal.name}
           onChange={(e) => updateMealName(meal.id, e.target.value)}
         />
         <button 
           onClick={() => removeMealTime(meal.id)}
-          className="text-red-400 hover:text-red-600 transition-colors"
+          className="text-red-400 hover:text-red-600 transition-colors p-2 hover:bg-red-50 rounded-full"
           title="Eliminar tiempo de comida"
         >
-          <Trash2 size={18} />
+          <Trash2 size={20} />
         </button>
       </div>
 
@@ -75,11 +75,11 @@ const MealTime = ({ meal }) => {
                   {item.quantity} {food.unidad} • {nutrition.equivalents.toFixed(1)} Eq. {nutrition.groupName}
                 </div>
               </div>
-              <div className="flex gap-3 text-xs text-slate-600 mr-4">
-                <span title="Proteína">P: {nutrition.proteina.toFixed(1)}</span>
-                <span title="Carbohidratos">HC: {nutrition.carbohidratos.toFixed(1)}</span>
-                <span title="Lípidos">L: {nutrition.lipidos.toFixed(1)}</span>
-                <span title="Energía" className="font-bold text-indigo-600">{nutrition.energia.toFixed(0)} kcal</span>
+              <div className="flex flex-col text-xs text-slate-600 mr-4 text-right gap-0.5">
+                <span>Proteína: {nutrition.proteina.toFixed(1)}g</span>
+                <span>Carbohidratos: {nutrition.carbohidratos.toFixed(1)}g</span>
+                <span>Lípidos: {nutrition.lipidos.toFixed(1)}g</span>
+                <span className="font-bold text-indigo-600">{nutrition.energia.toFixed(0)} kcal</span>
               </div>
               <button 
                 onClick={() => removeFoodFromMeal(meal.id, item.id)}
@@ -93,13 +93,13 @@ const MealTime = ({ meal }) => {
       </div>
 
       {/* Totales del Tiempo de Comida */}
-      <div className="bg-indigo-50 p-3 rounded-lg mb-4 flex justify-between text-sm font-medium text-indigo-900">
-        <span>Total {meal.name}:</span>
-        <div className="flex gap-3">
-          <span>P: {mealTotals.proteina.toFixed(1)}</span>
-          <span>HC: {mealTotals.carbohidratos.toFixed(1)}</span>
-          <span>L: {mealTotals.lipidos.toFixed(1)}</span>
-          <span>{mealTotals.energia.toFixed(0)} kcal</span>
+      <div className="bg-indigo-50 p-4 rounded-lg mb-4 flex justify-between items-start text-sm font-medium text-indigo-900">
+        <span className="text-base font-bold mt-1">Total {meal.name}:</span>
+        <div className="flex flex-col items-end gap-1">
+          <span>Proteína: {mealTotals.proteina.toFixed(1)}g</span>
+          <span>Carbohidratos: {mealTotals.carbohidratos.toFixed(1)}g</span>
+          <span>Lípidos: {mealTotals.lipidos.toFixed(1)}g</span>
+          <span className="font-bold text-base mt-1">{mealTotals.energia.toFixed(0)} kcal</span>
         </div>
       </div>
 
