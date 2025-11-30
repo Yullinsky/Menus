@@ -14,7 +14,7 @@ function App() {
           <div className="logo-section">
             <Link to="/" className="logo">
               <Utensils className="icon" />
-              <span>NutriMenu SMAE</span>
+              <span>Yullinsky Menú SMAE</span>
             </Link>
           </div>
           <div className="nav-links">
